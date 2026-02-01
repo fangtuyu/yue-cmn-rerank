@@ -6,7 +6,7 @@ checkpoint_path = "../output/best_model"
 test_file = "../data/data_test.txt"
 output_dir = "../../phrase-based-canto-mando/result"
 device = "cuda" if torch.cuda.is_available() else "cpu"
-batch_size = 1  
+batch_size = 1
 
 tokenizer = AutoTokenizer.from_pretrained(checkpoint_path, use_fast=False)
 model = MBartForConditionalGeneration.from_pretrained(checkpoint_path).to(device)
@@ -17,7 +17,6 @@ if new_token not in tokenizer.get_vocab():
     model.resize_token_embeddings(len(tokenizer))
 
 tokenizer.src_lang = "zh_CN"
-model.config.forced_bos_token_id = tokenizer.lang_code_to_id["zh_CN"]
 
 def load_data(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
@@ -48,7 +47,8 @@ with torch.no_grad():
         generated = model.generate(
             **encoded,
             max_new_tokens=128,
-            forced_bos_token_id=model.config.forced_bos_token_id  
+            num_beams=10,
+            num_return_sequences=1
         )
         preds = tokenizer.batch_decode(generated, skip_special_tokens=True)
         all_predictions.extend(preds)
