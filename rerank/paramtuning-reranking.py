@@ -140,7 +140,6 @@ def load_mart_model(model_dir: str, device, add_yue_token=False):
         if new_token not in tokenizer.get_vocab():
             tokenizer.add_tokens([new_token])
             model.resize_token_embeddings(len(tokenizer))
-        model.config.forced_bos_token_id = tokenizer.convert_tokens_to_ids(new_token)
     return model, tokenizer
 
 def generate_nbest(model, tokenizer, source_text: str, num_beams: int, device) -> Tuple[List[str], List[float]]:
