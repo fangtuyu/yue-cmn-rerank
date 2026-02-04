@@ -82,7 +82,7 @@ def main():
     scores = model.predict(
         comet_data,
         batch_size=BATCH_SIZE,
-        gpus=0 if USE_CPU else 1
+        gpus=0
     )
 
     print(f"COMET: {scores.system_score:.4f}")
